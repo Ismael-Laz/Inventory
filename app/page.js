@@ -32,8 +32,7 @@ export default function Home() {
   const [inventory, setInventory] = useState([])
   const [open, setOpen] = useState(false)
   const [itemName, setItemName] = useState('')
-  const [searchQuery, setSearchQuery] = useState('');
-
+  const [searchQuery, setSearchQuery] = useState('')
 
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, 'inventory'))
@@ -44,15 +43,10 @@ export default function Home() {
     })
     setInventory(inventoryList)
   }
-  
+
   useEffect(() => {
     updateInventory()
   }, [])
-
-  const filteredInventory = inventory.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  
 
   const addItem = async (item) => {
     const docRef = doc(collection(firestore, 'inventory'), item)
@@ -65,7 +59,7 @@ export default function Home() {
     }
     await updateInventory()
   }
-  
+
   const removeItem = async (item) => {
     const docRef = doc(collection(firestore, 'inventory'), item)
     const docSnap = await getDoc(docRef)
@@ -82,6 +76,10 @@ export default function Home() {
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
+
+  const filteredInventory = inventory.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
     <Box
@@ -141,9 +139,9 @@ export default function Home() {
             <Button
               variant="outlined"
               onClick={() => {
-                addItem(itemName);
-                setItemName('');
-                handleClose();
+                addItem(itemName)
+                setItemName('')
+                handleClose()
               }}
             >
               Add
@@ -185,13 +183,18 @@ export default function Home() {
               <Typography variant="h3" color="#333" textAlign="center">
                 Quantity: {quantity}
               </Typography>
-              <Button variant="contained" onClick={() => removeItem(name)}>
-                Remove
-              </Button>
+              <Stack direction="row" spacing={1}>
+                <Button variant="contained" onClick={() => removeItem(name)}>
+                  Remove
+                </Button>
+                <Button variant="contained" onClick={() => addItem(name)}>
+                  Add
+                </Button>
+              </Stack>
             </Box>
           ))}
         </Stack>
       </Box>
     </Box>
-  );  
+  )
 }
